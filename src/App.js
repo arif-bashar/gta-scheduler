@@ -1,19 +1,31 @@
-import React, {useState} from "react";
-// import Container from "react-bootstrap/Button";
+import React, {useState, useEffect} from "react";
+import styled from "styled-components";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+// import Container from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 // import './App.css';
-import styled from "styled-components";
 
 function App() {
   const [gtaFile, setGtaFile] = useState(null)
   const [courseFile, setCourseFile] = useState(null)
 
+  // Update gtaFile state every time file gets changed
+  const gtaFileHandler = (event) => {
+    setGtaFile(event.target.files[0]);
+  }
+
+  // Update courseFile state every time file gets changed
+  const courseFileHandler = (event) => {
+    setCourseFile(event.target.files[0]);
+  }
+
+  // Handler for upload button
   const uploadHandler = () => {
-    // fire upload events
+    console.log(gtaFile);
+    console.log(courseFile);
   };
 
   return (
@@ -30,16 +42,16 @@ function App() {
         </Row>
         <Row style={{ marginBottom: 60 }}>
           <Form.Group>
-            <Form.File id="gta-file" label="List of GTAs" onChange={setGtaFile}></Form.File>
+            <Form.File id="gta-file" label="List of GTAs" onChange={gtaFileHandler}></Form.File>
           </Form.Group>
         </Row>
         <Row style={{ marginBottom: 70 }}>
           <Form.Group>
-            <Form.File id="gta-file" label="List of courses" onChange={setCourseFile}></Form.File>
+            <Form.File id="gta-file" label="List of courses" onChange={courseFileHandler}></Form.File>
           </Form.Group>
         </Row>
 
-        <Button variant="primary" type="submit" onClick={uploadHandler}>
+        <Button variant="primary" type="button" onClick={uploadHandler}>
           Upload
         </Button>
       </FormContainer>
@@ -47,6 +59,7 @@ function App() {
   );
 }
 
+// Styled Components
 const AppContainer = styled.div`
   display: flex;
   width: 100vw;
