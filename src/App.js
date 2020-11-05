@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 // import Container from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -9,6 +9,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import styled from "styled-components";
 
 function App() {
+  const [gtaFile, setGtaFile] = useState(null)
+  const [courseFile, setCourseFile] = useState(null)
+
   const uploadHandler = () => {
     // fire upload events
   };
@@ -27,12 +30,12 @@ function App() {
         </Row>
         <Row style={{ marginBottom: 60 }}>
           <Form.Group>
-            <Form.File id="gta-file" label="List of GTAs"></Form.File>
+            <Form.File id="gta-file" label="List of GTAs" onChange={setGtaFile}></Form.File>
           </Form.Group>
         </Row>
         <Row style={{ marginBottom: 70 }}>
           <Form.Group>
-            <Form.File id="gta-file" label="List of courses"></Form.File>
+            <Form.File id="gta-file" label="List of courses" onChange={setCourseFile}></Form.File>
           </Form.Group>
         </Row>
 
