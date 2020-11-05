@@ -18,7 +18,7 @@ function App() {
 
   return (
     <AppContainer>
-      <FormContainer method="post">
+      <FormContainer>
         <Row style={{ marginBottom: 70 }}>
           <Col sm={2}>
             <NumberContainer>1</NumberContainer>
