@@ -4,28 +4,79 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+
+// Helper function
+import getSimpleLabs from "./helpers/getSimpleLabs";
+
 // import Container from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 // import './App.css';
 
 function App() {
-  const [gtaFile, setGtaFile] = useState(null)
-  const [courseFile, setCourseFile] = useState(null)
+  /* These two states keep track of file input and get updated
+  each time user uploads a new file */
+  const [gtasFile, setGTAsFile] = useState(null);
+  const [coursesFile, setCoursesFile] = useState(null);
 
-  // Update gtaFile state every time file gets changed
-  const gtaFileHandler = (event) => {
-    setGtaFile(event.target.files[0]);
+  /* These two states store the binary string format of the files
+  once upload button is pressed */
+  const [gtasBSTR, setGTAsBSTR] = useState(null);
+  const [coursesBSTR, setCoursesBSTR] = useState(null);
+
+  // When gtasBSTR and coursesBSTR get updated, this function fires
+  useEffect(() => {
+    if (gtasBSTR != null && coursesBSTR != null) {
+      const sched = getSimpleLabs(gtasBSTR, coursesBSTR);
+      for (let i = 0; i < sched.length; i++) {
+        console.log("-------------------------------------------------------------------------");
+        console.log("GTA Name: " + sched[i].Student);
+        for(let j = 0; j < sched[i].labs.length; j++){
+          console.log("Lab:");
+          console.log(sched[i].labs[j]);
+        }
+    
+        for(let j = 0; j < sched[i].duplicates.length; j++){
+          console.log("These two labs happen at the same time (Duplicates):");
+          console.log(sched[i].duplicates[j]);
+        }
+    
+      }
+    }
+
+  }, [gtasBSTR, coursesBSTR])
+
+  // Update gtasFile state every time file gets changed
+  const gtasFileHandler = (event) => {
+    setGTAsFile(event.target.files[0]);
+  };
+
+  // Update coursesFile state every time file gets changed
+  const coursesFileHandler = (event) => {
+    setCoursesFile(event.target.files[0]);
+  };
+
+  // Update gtasBSTR state
+  const gtasReadHandler = (e) => {
+    setGTAsBSTR(e.target.result);
   }
 
-  // Update courseFile state every time file gets changed
-  const courseFileHandler = (event) => {
-    setCourseFile(event.target.files[0]);
+  // Update coursesBSTR state
+  const coursesReadHandler = (e) => {
+    setCoursesBSTR(e.target.result);
   }
 
   // Handler for upload button
   const uploadHandler = () => {
-    console.log(gtaFile);
-    console.log(courseFile);
+    const gtasReader = new FileReader();
+    const coursesReader = new FileReader();
+
+    // Handler for when the file readers load the files
+    gtasReader.onload = gtasReadHandler;
+    coursesReader.onload = coursesReadHandler;
+
+    // Read these files as binary strings for xlsx usage
+    gtasReader.readAsBinaryString(gtasFile);
+    coursesReader.readAsBinaryString(coursesFile);
   };
 
   return (
@@ -42,12 +93,12 @@ function App() {
         </Row>
         <Row style={{ marginBottom: 60 }}>
           <Form.Group>
-            <Form.File id="gta-file" label="List of GTAs" onChange={gtaFileHandler}></Form.File>
+            <Form.File id="gta-file" label="List of GTAs" onChange={gtasFileHandler}></Form.File>
           </Form.Group>
         </Row>
         <Row style={{ marginBottom: 70 }}>
           <Form.Group>
-            <Form.File id="gta-file" label="List of courses" onChange={courseFileHandler}></Form.File>
+            <Form.File id="gta-file" label="List of courses" onChange={coursesFileHandler}></Form.File>
           </Form.Group>
         </Row>
 
