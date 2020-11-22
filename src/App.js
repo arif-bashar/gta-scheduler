@@ -4,7 +4,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import DropdownButton from "react-bootstrap/Button";
+import Carousel from "react-bootstrap/Carousel";
 
 // Helper function
 import getSimpleLabs from "./helpers/getSimpleLabs";
@@ -13,7 +13,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Dropdown from "react-bootstrap/Dropdown";
-import DropdownMenu from "react-bootstrap/esm/DropdownMenu";
+import DropdownButton from "react-bootstrap/DropdownButton";
 
 // import './App.css';
 
@@ -28,7 +28,7 @@ function App() {
   const [coursesBSTR, setCoursesBSTR] = useState(null);
 
   const [sched, setSchedule] = useState(null);
-
+  const [schedDisplay, showSchedule] = useState(null);
   // When gtasBSTR and coursesBSTR get updated, this function fires
   useEffect(() => {
     if (gtasBSTR != null && coursesBSTR != null) {
@@ -129,8 +129,9 @@ function App() {
     let items = []
     schedules.forEach((item, index) => {
       items.push(
-        <Dropdown.Item key={index}>{item.key}</Dropdown.Item>
+        <Dropdown.Item onClick={() => showSchedule(item)} key={index}>{item.key}</Dropdown.Item>
       )
+      console.log(item.key);
     })
     return items;
   }
@@ -141,16 +142,20 @@ function App() {
     console.log(schedules);
     return (
       <AppContainer>
-        <FormContainer>
-          <Dropdown>
-            <DropdownButton
-              title={"SelectStudent"}
-            >
-              {dropDowns
-              }
+        <Card>
+          <Card.Body>
+            <Card.Title>Schedules By GA</Card.Title>
+            <DropdownButton id="dropdown-basic-button" title="Select GA">
+              {dropDowns}
             </DropdownButton>
-          </Dropdown>
-        </FormContainer>
+            <Card>
+              <Card.Body>
+                {(schedDisplay ? schedDisplay.classes : null)}
+              </Card.Body>
+            </Card>
+
+          </Card.Body>
+        </Card>
       </AppContainer >
     );
 
@@ -194,7 +199,7 @@ function App() {
 const AppContainer = styled.div`
 display: flex;
 width: 100vw;
-height: 100vh;
+height: 100%;
 overflow-x: none;
 background: #333b51;
 justify-content: center;
