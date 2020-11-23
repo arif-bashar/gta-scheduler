@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+
+// Bootstrap
+import "bootstrap/dist/css/bootstrap.min.css";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Carousel from "react-bootstrap/Carousel";
+import Card from "react-bootstrap/Card";
+import Table from "react-bootstrap/Table";
+import Nav from "react-bootstrap/Nav";
 
 // Helper function
 import getSimpleLabs from "./helpers/getSimpleLabs";
-// import Container from "react-bootstrap/Button";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Card from "react-bootstrap/Card";
-import Table from "react-bootstrap/Table";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import Nav from "react-bootstrap/Nav";
-import Tab from "react-bootstrap/Tab";
 
-// import './App.css';
 
 function App() {
   /* These two states keep track of file input and get updated
@@ -72,8 +68,7 @@ function App() {
     coursesReader.readAsBinaryString(coursesFile);
   };
 
-  const lab = function (item) {
-    console.log(item);
+  const lab = (item) => {
     let students = new Set();
     for (let stud of item) {
       students.add({
@@ -85,7 +80,7 @@ function App() {
       item.labs.map((thing, position) => {
         let temp = (
           <Card
-            key={position}
+            // key={position}
             style={{
               paddingTop: 20,
               paddingBottom: 20,
@@ -141,7 +136,6 @@ function App() {
           <Nav.Link eventKey={item.key}>{item.key}</Nav.Link>
         </Nav.Item>
       );
-      console.log(item.key);
     });
     return items;
   };
@@ -149,7 +143,6 @@ function App() {
   if (sched) {
     let schedules = lab(sched);
     let dropDowns = dropDownItems(schedules);
-    console.log(schedules);
     return (
       <ScheduleView style={{ height: schedDisplay ? "100%" : "100vh" }}>
         <GTASide>
