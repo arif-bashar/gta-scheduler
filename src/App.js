@@ -14,7 +14,6 @@ import Nav from "react-bootstrap/Nav";
 // Helper function
 import getSimpleLabs from "./helpers/getSimpleLabs";
 
-
 function App() {
   /* These two states keep track of file input and get updated
   each time user uploads a new file */
@@ -26,8 +25,9 @@ function App() {
   const [coursesBSTR, setCoursesBSTR] = useState(null);
 
   const [sched, setSchedule] = useState(null);
-  const [schedDisplay, showSchedule] = useState(null);
+  const [labsToDisplay, setLabsToDisplay] = useState(null);
   // When gtasBSTR and coursesBSTR get updated, this function fires
+
   useEffect(() => {
     if (gtasBSTR != null && coursesBSTR != null) {
       setSchedule(getSimpleLabs(gtasBSTR, coursesBSTR));
@@ -68,83 +68,63 @@ function App() {
     coursesReader.readAsBinaryString(coursesFile);
   };
 
-  const lab = (item) => {
-    let students = new Set();
-    for (let stud of item) {
-      students.add({
-        key: stud.Student,
-        classes: [],
-      });
-    }
-    sched.map((item, index) => {
-      item.labs.map((thing, position) => {
-        let temp = (
-          <Card
-            // key={position}
-            style={{
-              paddingTop: 20,
-              paddingBottom: 20,
-              paddingLeft: 20,
-              paddingRight: 20,
-              marginRight: 10,
-              marginBottom: "1rem",
-            }}
-          >
-            <Card.Title>{thing.Course}</Card.Title>
-            <Card.Subtitle>
-              {"CRN: " + thing.CRN + "   |   Student: " + item.Student}
-            </Card.Subtitle>
-            <Card.Text>
-              <Table responsive bordered>
-                <thead>
-                  <tr>
-                    <th>M</th>
-                    <th>T</th>
-                    <th>W</th>
-                    <th>TH</th>
-                    <th>F</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{thing.Days.M ? thing.Begin + "-" + thing.End : ""}</td>
-                    <td>{thing.Days.T ? thing.Begin + "-" + thing.End : ""}</td>
-                    <td>{thing.Days.W ? thing.Begin + "-" + thing.End : ""}</td>
-                    <td>{thing.Days.R ? thing.Begin + "-" + thing.End : ""}</td>
-                    <td>{thing.Days.F ? thing.Begin + "-" + thing.End : ""}</td>
-                  </tr>
-                </tbody>
-              </Table>
-            </Card.Text>
-          </Card>
-        );
-        students.forEach((student) => {
-          if (student.key === item.Student) {
-            student.classes.push(temp);
-          }
-        });
-      });
-    });
-    return students;
-  };
+  // Renders schedule view
+  const renderSchedules = () => {
+    const studentTabs = sched.map((student, index) => (
+      <Nav.Item key={index} onClick={() => setLabsToDisplay(index)}>
+        <Nav.Link eventKey={index}>{student.Student}</Nav.Link>
+      </Nav.Item>
+    ));
 
-  const dropDownItems = (schedules) => {
-    let items = [];
-    schedules.forEach((item, index) => {
-      items.push(
-        <Nav.Item onClick={() => showSchedule(item)} key={index}>
-          <Nav.Link eventKey={item.key}>{item.key}</Nav.Link>
-        </Nav.Item>
-      );
-    });
-    return items;
-  };
+    let labView;
 
-  if (sched) {
-    let schedules = lab(sched);
-    let dropDowns = dropDownItems(schedules);
+    if (labsToDisplay != null)
+      labView = sched[labsToDisplay].labs.map((lab, index) => (
+        <Card
+          key={index}
+          style={{
+            paddingTop: 20,
+            paddingBottom: 20,
+            paddingLeft: 20,
+            paddingRight: 20,
+            marginRight: 10,
+            marginBottom: "1rem",
+          }}
+        >
+          <Card.Title>{lab.Course}</Card.Title>
+          <Card.Subtitle>
+            {"CRN: " +
+              lab.CRN +
+              "   |   Student: " +
+              sched[labsToDisplay].Student}
+          </Card.Subtitle>
+          <Card.Body>
+            <Table responsive bordered>
+              <thead>
+                <tr>
+                  <th>M</th>
+                  <th>T</th>
+                  <th>W</th>
+                  <th>TH</th>
+                  <th>F</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{lab.Days.M ? lab.Begin + "-" + lab.End : ""}</td>
+                  <td>{lab.Days.T ? lab.Begin + "-" + lab.End : ""}</td>
+                  <td>{lab.Days.W ? lab.Begin + "-" + lab.End : ""}</td>
+                  <td>{lab.Days.R ? lab.Begin + "-" + lab.End : ""}</td>
+                  <td>{lab.Days.F ? lab.Begin + "-" + lab.End : ""}</td>
+                </tr>
+              </tbody>
+            </Table>
+          </Card.Body>
+        </Card>
+      ));
+
     return (
-      <ScheduleView style={{ height: schedDisplay ? "100%" : "100vh" }}>
+      <ScheduleView style={{ height: labsToDisplay ? "100%" : "100vh" }}>
         <GTASide>
           <Row>
             <Col sm={3}>
@@ -159,21 +139,22 @@ function App() {
           <Row>
             <GTAContainer>
               <Nav fill variant="pills" className="flex-column">
-                {dropDowns}
+                {studentTabs}
               </Nav>
             </GTAContainer>
           </Row>
         </GTASide>
         <ScheduleSide>
-          <ScheduleContainer>
-            {schedDisplay ? schedDisplay.classes : null}
-          </ScheduleContainer>
+          <ScheduleContainer>{labView ? labView : <PlaceHolderText>Please Select a GTA</PlaceHolderText>}</ScheduleContainer>
         </ScheduleSide>
       </ScheduleView>
     );
-  }
+  };
 
-  if (!sched) {
+  
+  // If sched has been loaded, show the new view to the user
+  if (sched) return renderSchedules();
+  else { // Otherwise ask the user to upload their input files
     return (
       <AppContainer>
         <FormContainer>
@@ -280,7 +261,7 @@ const ScheduleContainer = styled.div`
   overflow-x: none;
   background: #98afff;
   border-radius: 10px;
-  justify-content: space-between;
+  justify-content: space-evenly;
   padding: 20px 20px;
 `;
 
@@ -320,5 +301,9 @@ const FormSubtitle = styled.h5`
   color: #7b7b7b;
   font-weight: 300;
 `;
+
+const PlaceHolderText = styled.h4`
+  color: white;
+`
 
 export default App;
