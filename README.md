@@ -1,3 +1,12 @@
+## Lab Scheduling Tool for the Department Chair of Computer Science at Middle Tennessee State University
+--> This app is live [here](https://gtascheduler.netlify.app/)
+
+--> Main scheduling algorithm can be found in helper/ directory
+
+--> A sample of what the "List of GTAs" excel file should look like is in the example/ directory
+
+
+## __________________________________________
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
