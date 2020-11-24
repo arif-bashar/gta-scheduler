@@ -145,54 +145,68 @@ function App() {
           </Row>
         </GTASide>
         <ScheduleSide>
-          <ScheduleContainer>{labView ? labView : <PlaceHolderText>Please Select a GTA</PlaceHolderText>}</ScheduleContainer>
+          <ScheduleContainer>
+            {labView ? (
+              labView
+            ) : (
+              <PlaceHolderText>Please Select a GTA</PlaceHolderText>
+            )}
+          </ScheduleContainer>
         </ScheduleSide>
       </ScheduleView>
     );
   };
 
-  
   // If sched has been loaded, show the new view to the user
   if (sched) return renderSchedules();
-  else { // Otherwise ask the user to upload their input files
+  else {
+    // Otherwise ask the user to upload their input files
     return (
       <>
-      <AppContainer>
-        <FormContainer>
-          <Row style={{ marginBottom: 70 }}>
-            <Col sm={2}>
-              <NumberContainer>1</NumberContainer>
-            </Col>
-            <Col sm={10}>
-              <FormTitle>Upload your files</FormTitle>
-              <FormSubtitle>Files should be in .xlsx format</FormSubtitle>
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 60 }}>
-            <Form.Group>
-              <Form.File
-                id="gta-file"
-                label="List of GTAs"
-                onChange={gtasFileHandler}
-              ></Form.File>
-            </Form.Group>
-          </Row>
-          <Row style={{ marginBottom: 70 }}>
-            <Form.Group>
-              <Form.File
-                id="gta-file"
-                label="List of courses"
-                onChange={coursesFileHandler}
-              ></Form.File>
-            </Form.Group>
-          </Row>
+        <AppContainer>
+          <FormContainer>
+            <Row style={{ marginBottom: 70 }}>
+              <Col sm={2}>
+                <NumberContainer>1</NumberContainer>
+              </Col>
+              <Col sm={10}>
+                <FormTitle>Upload your files</FormTitle>
+                <FormSubtitle>Files should be in .xlsx format</FormSubtitle>
+              </Col>
+            </Row>
+            <Row style={{ marginBottom: 60 }}>
+              <Form.Group>
+                <Form.File
+                  id="gta-file"
+                  label="List of GTAs"
+                  onChange={gtasFileHandler}
+                ></Form.File>
+              </Form.Group>
+            </Row>
+            <Row style={{ marginBottom: 70 }}>
+              <Form.Group>
+                <Form.File
+                  id="gta-file"
+                  label="List of courses"
+                  onChange={coursesFileHandler}
+                ></Form.File>
+              </Form.Group>
+            </Row>
 
-          <Button variant="primary" type="button" onClick={uploadHandler}>
-            Upload
-          </Button>
-        </FormContainer>
-      </AppContainer>
-      <FooterContainer><a href="https://github.com/arif-bashar/gta-scheduler" target="_blank">Source Code</a></FooterContainer>
+            <Button variant="primary" type="button" onClick={uploadHandler}>
+              Upload
+            </Button>
+          </FormContainer>
+        </AppContainer>
+        <FooterContainer>
+          <a
+            href="https://github.com/arif-bashar/gta-scheduler"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Source Code
+          </a>
+        </FooterContainer>
       </>
     );
   }
@@ -316,6 +330,6 @@ const FormSubtitle = styled.h5`
 
 const PlaceHolderText = styled.h4`
   color: white;
-`
+`;
 
 export default App;
