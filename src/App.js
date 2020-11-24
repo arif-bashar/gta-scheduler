@@ -77,8 +77,12 @@ function App() {
     ));
 
     let labView;
+    let duplicateView;
 
-    if (labsToDisplay != null)
+
+    if (labsToDisplay != null) {
+
+      // Render all the availability
       labView = sched[labsToDisplay].labs.map((lab, index) => (
         <Card
           key={index}
@@ -123,6 +127,53 @@ function App() {
         </Card>
       ));
 
+      // Renders the classes that happen at the same time
+      duplicateView = sched[labsToDisplay].duplicates.map((labs, index) => (
+            <Card
+              key={index}
+              style={{
+                paddingTop: 20,
+                paddingBottom: 20,
+                paddingLeft: 20,
+                paddingRight: 20,
+                marginRight: 10,
+                marginBottom: "1rem",
+                background: "#FFB4B4"
+              }}
+            >
+              <Card.Title>{labs[0].Course + " and " + labs[1].Course}</Card.Title>
+              <Card.Subtitle>
+                {"CRN: " +
+                  labs[0].CRN + " / " + labs[1].CRN +
+                  "   |   Student: " +
+                  sched[labsToDisplay].Student}
+              </Card.Subtitle>
+              <Card.Body>
+                <Table responsive bordered>
+                  <thead>
+                    <tr>
+                      <th>M</th>
+                      <th>T</th>
+                      <th>W</th>
+                      <th>TH</th>
+                      <th>F</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{labs[0].Days.M ? labs[0].Begin + "-" + labs[0].End : ""}</td>
+                      <td>{labs[0].Days.T ? labs[0].Begin + "-" + labs[0].End : ""}</td>
+                      <td>{labs[0].Days.W ? labs[0].Begin + "-" + labs[0].End : ""}</td>
+                      <td>{labs[0].Days.R ? labs[0].Begin + "-" + labs[0].End : ""}</td>
+                      <td>{labs[0].Days.F ? labs[0].Begin + "-" + labs[0].End : ""}</td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </Card.Body>
+            </Card>
+      ));
+    }
+
     return (
       <ScheduleView style={{ height: labsToDisplay ? "100%" : "100vh" }}>
         <GTASide>
@@ -151,6 +202,9 @@ function App() {
             ) : (
               <PlaceHolderText>Please Select a GTA</PlaceHolderText>
             )}
+            <DuplicateContainer>
+              {duplicateView ? duplicateView : null}
+            </DuplicateContainer>
           </ScheduleContainer>
         </ScheduleSide>
       </ScheduleView>
@@ -289,6 +343,14 @@ const ScheduleContainer = styled.div`
   border-radius: 10px;
   justify-content: space-evenly;
   padding: 20px 20px;
+`;
+
+const DuplicateContainer = styled.div`
+  margin-top: 20px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  /* flex-flow: row wrap; */
 `;
 
 const FormContainer = styled.form`
