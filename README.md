@@ -1,9 +1,9 @@
 ## Lab Scheduling Tool for the Department Chair of Computer Science at Middle Tennessee State University
 --> This app is live [here](https://gtascheduler.netlify.app/)
 
---> Main scheduling algorithm can be found in helper/ directory
+--> Main scheduling algorithm can be found in src/helper/ directory
 
---> A sample of what the "List of GTAs" excel file should look like is in the example/ directory
+--> An example of what the "List of GTAs" excel file should look like is in the src/example/ directory
 
 
 ## __________________________________________
