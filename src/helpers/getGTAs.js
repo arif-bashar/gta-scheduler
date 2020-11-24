@@ -98,8 +98,6 @@ const appendDays = (scheduleSheet, gtas) => {
 
 // Iterates through spreadsheet to extract time information
 const appendTime = (scheduleSheet, gtas) => {
-  let busy;
-  let sched;
   let index = -1;
   let busyIndex = 0;
 
@@ -115,8 +113,6 @@ const appendTime = (scheduleSheet, gtas) => {
         let value = scheduleSheet[cell].v;
         
         if (value === "TIME" && index < gtas.length) {
-          busy = [];
-          sched = {};
           busyIndex = 0;
           index++;
         } else {
