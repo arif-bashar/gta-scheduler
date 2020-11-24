@@ -156,6 +156,7 @@ function App() {
   if (sched) return renderSchedules();
   else { // Otherwise ask the user to upload their input files
     return (
+      <>
       <AppContainer>
         <FormContainer>
           <Row style={{ marginBottom: 70 }}>
@@ -191,13 +192,24 @@ function App() {
           </Button>
         </FormContainer>
       </AppContainer>
+      <FooterContainer><a href="https://github.com/arif-bashar/gta-scheduler" target="_blank">Source Code</a></FooterContainer>
+      </>
     );
   }
 }
 
 // Styled Components
+const FooterContainer = styled.footer`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ff7272;
+`;
+
 const AppContainer = styled.div`
   display: flex;
+  flex-direction: column;
   width: 100vw;
   height: 100vh;
   overflow-x: none;
